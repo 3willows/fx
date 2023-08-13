@@ -1,6 +1,13 @@
 let DRY = new Uint8Array();
 let WET = new Uint8Array();
 
+export interface Parameter {
+  name: string;
+  defaultValue: number;
+  minValue: number;
+  maxValue: number;
+}
+
 export default class Audio {
   ctx = new AudioContext();
   #el = document.createElement("audio");
@@ -23,8 +30,8 @@ export default class Audio {
     this.#connect();
   }
 
-  async filter(code: string) {
-    const worklet = code ? await compile(this.ctx, code) : undefined;
+  async compile(code: string, params: Parameter[]) {
+    const worklet = code ? await compile(this.ctx, code, params) : undefined;
     this.#worklet?.disconnect();
     this.#source.disconnect();
     this.#dry.disconnect();
@@ -33,6 +40,10 @@ export default class Audio {
     this.#worklet = worklet;
     this.#connect();
   }
+
+  // param(key: string, value: number) {
+  //   this.#worklet?.parameters.get(key)?.setValueAtTime(value, 0);
+  // }
 
   graphs() {
     if (DRY.length !== this.#dry.frequencyBinCount) DRY = new Uint8Array(this.#dry.frequencyBinCount);
@@ -55,14 +66,14 @@ export default class Audio {
 
 let n = 0;
 
-export async function compile(ctx: AudioContext, code: string) {
+export async function compile(ctx: AudioContext, code: string, params: Parameter[]) {
   const name = `${++n}`;
 
   const src = `
     class Gain extends AudioWorkletProcessor {
       prev = Date.now();
  
-      process(inputs, outputs, params) {
+      process(inputs, outputs, parameters) {
         const inputChannels = inputs[0];
         const outputChannels = outputs[0];
 
@@ -70,7 +81,12 @@ export async function compile(ctx: AudioContext, code: string) {
           const input = inputChannels[channel];
           const output = outputChannels[channel];
 
-          this.run(input, output);
+          const params = {};
+          for (const [key, value] of Object.entries(parameters)) {
+            params[key] = parameters[key][0];
+          }
+
+          this.run(input, output, params);
         }
 
         // const now = Date.now();
@@ -83,8 +99,12 @@ export async function compile(ctx: AudioContext, code: string) {
         return false;
       }
     
-      run(input, output) {
+      run(input, output, parameters) {
         ${code}
+      }
+
+      static get parameterDescriptors() {
+        return ${JSON.stringify(params.map(param => ({ ...param, automationRate: "k-rate" })))};
       }
     }
     

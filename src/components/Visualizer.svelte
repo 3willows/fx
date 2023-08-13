@@ -17,8 +17,8 @@
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    waveform(dry, "black");
-    waveform(wet, "green");
+    waveform(dry, "#cccccc");
+    waveform(wet, "#6c4fff");
 
     requestAnimationFrame(draw);
   }
@@ -46,11 +46,33 @@
   draw();
 </script>
 
-<canvas class="canvas" bind:this={canvas} bind:clientWidth={w} bind:clientHeight={h} />
+<figure class="wrapper">
+  <canvas class="canvas" bind:this={canvas} bind:clientWidth={w} bind:clientHeight={h} />
+  <figcaption class="axis">
+    <span>20 Hz</span>
+    <span>20 kHz</span>
+  </figcaption>
+</figure>
 
 <style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid #eeeeee;
+  }
+
   .canvas {
     width: 100%;
     height: 10rem;
+  }
+
+  .axis {
+    display: flex;
+    justify-content: space-between;
+    color: #999999;
+    font-size: var(--text-sm);
   }
 </style>
