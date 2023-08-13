@@ -1,14 +1,14 @@
 export default class Audio {
   ctx = new AudioContext();
-  #audio = document.createElement("audio");
-  #source = this.ctx.createMediaElementSource(this.#audio);
+  #el = document.createElement("audio");
+  #source = this.ctx.createMediaElementSource(this.#el);
   #worklet?: AudioWorkletNode;
 
-  set audio(el: HTMLAudioElement | undefined) {
+  set el(el: HTMLAudioElement | undefined) {
     if (!el) return;
 
-    this.#audio = el;
-    this.#source = this.ctx.createMediaElementSource(this.#audio);
+    this.#el = el;
+    this.#source = this.ctx.createMediaElementSource(this.#el);
     this.#connect();
   }
 
@@ -32,7 +32,7 @@ let n = 0;
 export async function compile(ctx: AudioContext, code: string) {
   const name = `${++n}`;
 
-  const mod = ` 
+  const src = `
     class Gain extends AudioWorkletProcessor {
       prev = Date.now();
  
@@ -40,20 +40,24 @@ export async function compile(ctx: AudioContext, code: string) {
         const inputChannels = inputs[0];
         const outputChannels = outputs[0];
 
- 
-        this.run(inputChannels, outputChannels);
+        for (let channel = 0; channel < inputChannels.length; channel++) {
+          const input = inputChannels[channel];
+          const output = outputChannels[channel];
 
-        const now = Date.now();
-        const delta = now - this.prev;
-        if (delta >= 1000) {
-          this.prev += 1000;
-          console.log(${name});
+          this.run(input, output);
         }
+
+        // const now = Date.now();
+        // const delta = now - this.prev;
+        // if (delta >= 1000) {
+        //   this.prev += 1000;
+        //   console.log(${name});
+        // }
     
         return false;
       }
     
-      run(inputs, outputs) {
+      run(input, output) {
         ${code}
       }
     }
@@ -61,22 +65,9 @@ export async function compile(ctx: AudioContext, code: string) {
     registerProcessor(${name}, Gain);
   `;
 
-  const file = new File([mod], "fx.js");
+  const file = new File([src], "fx.js");
   const url = URL.createObjectURL(file);
   await ctx.audioWorklet.addModule(url);
   URL.revokeObjectURL(url);
   return new AudioWorkletNode(ctx, "" + name);
 }
-
-/*
-
-
-for (let channel = 0; channel < inputs.length; channel++) {
-  const input = inputs[channel];
-  const output = outputs[channel];
-
-  for (let i = 0; i < input.length; i++) {
-    output[i] = input[i] * 0.5;
-  }
-}
-*/
