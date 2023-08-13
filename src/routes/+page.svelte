@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import FileUploader from "../components/FileUploader.svelte";
+  import { compile } from "$lib/worklet";
+  import Audio from "$lib/Audio";
 
   let file: File;
   let url = "";
@@ -9,20 +11,31 @@
     if (file) url = URL.createObjectURL(file);
   }
 
-  const ctx = new AudioContext();
+  let code = "";
+
+  const sound = new Audio();
   let audio: HTMLAudioElement;
+  $: sound.audio = audio;
+  $: sound.filter(code);
+  // const ctx = new AudioContext();
+  // let audio: HTMLAudioElement;
+  // let source: MediaElementAudioSourceNode;
+  // $: if (audio) source = ctx.createMediaElementSource(audio);
 
-  $: if (audio) {
-    const source = ctx.createMediaElementSource(audio);
-    const gain = new AudioWorkletNode(ctx, "gain");
+  // let node: AudioWorkletNode;
+  // $: if (audio) {
+  //   source.disconnect();
+  //   node?.disconnect();
 
-    source.connect(gain);
-    gain.connect(ctx.destination);
-  }
+  //   if (code) {
+  //     compile(ctx, code).then(n => {
+  //       source.connect(n);
+  //       n.connect(ctx.destination);
 
-  onMount(async () => {
-    await ctx.audioWorklet.addModule("/gain.js");
-  });
+  //       node = n;
+  //     });
+  //   } else source.connect(ctx.destination);
+  // }
 </script>
 
 <div class="wrapper">
@@ -32,9 +45,12 @@
       file = e.detail.file;
     }}
   />
+
   {#if url}
     <audio bind:this={audio} src={url} controls />
   {/if}
+
+  <textarea bind:value={code} />
 </div>
 
 <style>
