@@ -1,8 +1,19 @@
+let DRY = new Uint8Array();
+let WET = new Uint8Array();
+
 export default class Audio {
   ctx = new AudioContext();
   #el = document.createElement("audio");
   #source = this.ctx.createMediaElementSource(this.#el);
   #worklet?: AudioWorkletNode;
+
+  #dry = this.ctx.createAnalyser();
+  #wet = this.ctx.createAnalyser();
+
+  constructor() {
+    this.#dry.fftSize = 256;
+    this.#wet.fftSize = 256;
+  }
 
   set el(el: HTMLAudioElement | undefined) {
     if (!el) return;
@@ -16,14 +27,29 @@ export default class Audio {
     const worklet = code ? await compile(this.ctx, code) : undefined;
     this.#worklet?.disconnect();
     this.#source.disconnect();
+    this.#dry.disconnect();
+    this.#wet.disconnect();
 
     this.#worklet = worklet;
     this.#connect();
   }
 
+  graphs() {
+    if (DRY.length !== this.#dry.frequencyBinCount) DRY = new Uint8Array(this.#dry.frequencyBinCount);
+    if (WET.length !== this.#wet.frequencyBinCount) WET = new Uint8Array(this.#wet.frequencyBinCount);
+
+    this.#dry.getByteFrequencyData(DRY);
+    this.#wet.getByteFrequencyData(WET);
+
+    return [DRY, WET] as const;
+  }
+
   #connect() {
-    this.#worklet?.connect(this.ctx.destination);
-    this.#source.connect(this.#worklet || this.ctx.destination);
+    this.#source.connect(this.#dry);
+    this.#dry.connect(this.#worklet || this.ctx.destination);
+
+    this.#worklet?.connect(this.#wet);
+    this.#wet.connect(this.ctx.destination);
   }
 }
 

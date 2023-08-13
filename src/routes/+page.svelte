@@ -1,5 +1,6 @@
 <script lang="ts">
-  import FileUploader from "../components/FileUploader.svelte";
+  import FileUploader from "$components/FileUploader.svelte";
+  import Visualizer from "$components/Visualizer.svelte";
   import Audio from "$lib/Audio";
 
   let file: File;
@@ -28,6 +29,8 @@
   {#if url}
     <audio bind:this={el} src={url} controls />
   {/if}
+
+  <Visualizer {audio} />
 
   <textarea bind:value={code} rows={10} />
 </div>
