@@ -12,7 +12,4 @@ export const code = writable(CODE);
 export const params = writable<Parameter[]>(JSON.parse(PARAMS));
 
 code.subscribe(value => localStorage.setItem("code", value));
-params.subscribe(value => {
-  console.log(value);
-  localStorage.setItem("params", JSON.stringify(value));
-});
+params.subscribe(value => localStorage.setItem("params", JSON.stringify(value)));

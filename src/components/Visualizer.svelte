@@ -11,6 +11,8 @@
     canvas.height = h * window.devicePixelRatio;
   }
 
+  const primary = getComputedStyle(document.documentElement).getPropertyValue("--color-primary");
+
   function draw() {
     if (!canvas || !ctx) return requestAnimationFrame(draw);
     const [dry, wet] = audio.graphs();
@@ -18,7 +20,7 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     waveform(dry, "#cccccc");
-    waveform(wet, "#6c4fff");
+    waveform(wet, primary);
 
     requestAnimationFrame(draw);
   }

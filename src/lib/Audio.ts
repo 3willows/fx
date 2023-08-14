@@ -75,6 +75,12 @@ let n = 0;
 export async function compile(ctx: AudioContext, code: string, params: Parameter[]) {
   const name = `${++n}`;
 
+  const description = params.map(param => ({
+    ...param,
+    defaultValue: Math.min(param.maxValue, Math.max(param.defaultValue, param.minValue)),
+    automationRate: "k-rate"
+  }));
+
   const src = `
     class Gain extends AudioWorkletProcessor {
       prev = Date.now();
@@ -87,10 +93,11 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
           const input = inputChannels[channel];
           const output = outputChannels[channel];
 
-          const params = {};
-          for (const [key, value] of Object.entries(parameters)) {
-            params[key] = parameters[key][0];
-          }
+          const params = new Proxy({}, {
+            get(target, prop) {
+              return parameters[prop]?.[0] || 0;
+            }
+          });
 
           this.run(input, output, params);
         }
@@ -103,7 +110,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
       }
 
       static get parameterDescriptors() {
-        return ${JSON.stringify(params.map(param => ({ ...param, automationRate: "k-rate" })))};
+        return ${JSON.stringify(description)};
       }
     }
     

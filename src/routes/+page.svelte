@@ -23,7 +23,7 @@
 </script>
 
 <div class="wrapper">
-  <Panel title="Audio">
+  <Panel title="Audio" --area="audio">
     {#if url}
       <div>
         <audio bind:this={el} src={url} controls loop />
@@ -38,34 +38,29 @@
     {/if}
   </Panel>
 
-  <Panel title="Frequencies">
+  <Panel title="Frequencies" --area="waveform">
     <Visualizer {audio} />
   </Panel>
 
-  <div class="editor">
-    <Panel title="Code">
-      <Editor bind:value={$code} />
-    </Panel>
+  <Panel title="Code" --area="code">
+    <Editor bind:value={$code} />
+  </Panel>
 
-    <Panel title="Parameters">
-      <button
-        class="button"
-        slot="actions"
-        on:click={() => {
-          params.set([...$params, { name: "", defaultValue: 1, minValue: 0, maxValue: 1 }]);
-        }}
-      >
-        Add parameter
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
-          <path
-            d="M11,5H7V1A1,1,0,0,0,5,1V5H1A1,1,0,0,0,1,7H5v4a1,1,0,0,0,2,0V7h4a1,1,0,0,0,0-2Z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
-      <Parameters bind:parameters={$params} />
-    </Panel>
-  </div>
+  <Panel title="Parameters" --area="params">
+    <button
+      class="button"
+      slot="actions"
+      on:click={() => {
+        params.set([...$params, { name: "", defaultValue: 1, minValue: 0, maxValue: 1 }]);
+      }}
+    >
+      Add parameter
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M11,5H7V1A1,1,0,0,0,5,1V5H1A1,1,0,0,0,1,7H5v4a1,1,0,0,0,2,0V7h4a1,1,0,0,0,0-2Z" fill="currentColor" />
+      </svg>
+    </button>
+    <Parameters bind:parameters={$params} />
+  </Panel>
 </div>
 
 <style>
@@ -73,14 +68,10 @@
     height: 100%;
     display: grid;
     grid-template-rows: auto auto 1fr;
-    padding: 1rem 2rem 2rem;
-    gap: 1rem;
-  }
-
-  .editor {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-areas: "audio audio" "waveform waveform" "code params";
+    padding: 1rem 2rem 2rem;
+    gap: 2rem;
   }
 
   .button {
@@ -89,12 +80,12 @@
     gap: 0.5rem;
     padding: 0 0.75rem;
     border: none;
-    background-color: transparent;
     font-size: var(--text-sm);
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 0 0 1px var(--color-border);
     border-radius: 2rem;
+    color: var(--color-primary);
+    background-color: var(--color-border);
   }
 
   .button:hover {

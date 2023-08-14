@@ -42,7 +42,8 @@
   .parameter {
     display: grid;
     grid-template-columns: 1fr auto auto 1fr auto;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    align-items: center;
   }
 
   .input {
@@ -59,6 +60,9 @@
   }
 
   .remove {
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
     border: none;
     background-color: transparent;
     cursor: pointer;
