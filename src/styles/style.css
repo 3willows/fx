@@ -1,8 +1,13 @@
 @import "./reset.css";
 
 :root {
+  --font-code: "Cartograph CF", mono;
+  --color-primary: #7a77ec;
   --color-border: #eeeeee;
+  --color-text-primary: #000000;
+  --color-text-secondary: #666666;
   --text-sm: 0.75rem;
+  --text-md: 1rem;
   --radius-lg: 0.5rem;
 }
 

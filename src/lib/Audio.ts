@@ -17,9 +17,15 @@ export default class Audio {
   #dry = this.ctx.createAnalyser();
   #wet = this.ctx.createAnalyser();
 
+  static FFT_SIZE = 1024;
+  static SMOOTHING_TIME_CONSTANT = 0.9;
+
   constructor() {
-    this.#dry.fftSize = 256;
-    this.#wet.fftSize = 256;
+    this.#dry.fftSize = Audio.FFT_SIZE;
+    this.#wet.fftSize = Audio.FFT_SIZE;
+
+    this.#dry.smoothingTimeConstant = Audio.SMOOTHING_TIME_CONSTANT;
+    this.#wet.smoothingTimeConstant = Audio.SMOOTHING_TIME_CONSTANT;
   }
 
   set el(el: HTMLAudioElement | undefined) {
@@ -88,13 +94,6 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
 
           this.run(input, output, params);
         }
-
-        // const now = Date.now();
-        // const delta = now - this.prev;
-        // if (delta >= 1000) {
-        //   this.prev += 1000;
-        //   console.log(${name});
-        // }
     
         return false;
       }

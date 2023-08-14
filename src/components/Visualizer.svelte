@@ -23,7 +23,7 @@
     requestAnimationFrame(draw);
   }
 
-  const gutter = 2;
+  const gutter = 0;
   function waveform(data: Uint8Array, color: string) {
     if (!canvas || !ctx) return;
 
@@ -44,6 +44,9 @@
   }
 
   draw();
+
+  // TODO: average diffs to get envelope shape
+  // https://math.stackexchange.com/questions/106700/incremental-averaging
 </script>
 
 <figure class="wrapper">
@@ -61,7 +64,7 @@
     gap: 1rem;
     padding: 1rem;
     border-radius: var(--radius-lg);
-    border: 1px solid #eeeeee;
+    border: 1px solid var(--color-border);
   }
 
   .canvas {

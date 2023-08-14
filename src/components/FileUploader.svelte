@@ -35,7 +35,7 @@
   .wrapper {
     position: relative;
     overflow: hidden;
-    border: 2px dashed #eeeeee;
+    border: 2px dashed var(--color-border);
     text-align: center;
     padding: 1rem;
     border-radius: var(--radius-lg);
