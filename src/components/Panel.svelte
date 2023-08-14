@@ -15,7 +15,8 @@
     height: 100%;
     display: grid;
     grid-template-rows: auto 1fr;
-    overflow-y: hidden;
+    overflow: clip;
+    overflow-clip-margin: 1rem;
     grid-area: var(--area);
   }
 
