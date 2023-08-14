@@ -20,7 +20,7 @@
             <input class="input number" bind:value={parameter.maxValue} />
           </td>
           <td class="wide range">
-            <Range bind:value={parameter.defaultValue} />
+            <Range bind:value={parameter.defaultValue} min={parameter.minValue} max={parameter.maxValue} />
           </td>
           <td class="button">
             <button class="remove" on:click={() => (parameters = parameters.filter((_, i) => i !== idx))}>
