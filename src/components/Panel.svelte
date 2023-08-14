@@ -28,7 +28,6 @@
   }
 
   .title {
-    font-family: var(--font-code);
     font-size: var(--text-md);
     letter-spacing: -0.05ch;
   }

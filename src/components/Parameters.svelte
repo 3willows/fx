@@ -43,7 +43,6 @@
     overflow: auto;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
-    font-family: var(--font-code);
   }
 
   table {

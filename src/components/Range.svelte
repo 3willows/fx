@@ -41,4 +41,9 @@
     background-color: #ffffff;
     border: 2px solid var(--color-border);
   }
+
+  input:hover::-webkit-slider-thumb,
+  input:hover::-moz-range-thumb {
+    background-color: var(--color-border);
+  }
 </style>

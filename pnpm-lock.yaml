@@ -5,9 +5,21 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@codemirror/autocomplete':
+    specifier: ^6.9.0
+    version: 6.9.0(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.16.0)(@lezer/common@1.0.3)
+  '@codemirror/commands':
+    specifier: ^6.2.4
+    version: 6.2.4
   '@codemirror/lang-javascript':
     specifier: ^6.1.9
     version: 6.1.9
+  '@codemirror/language':
+    specifier: ^6.8.0
+    version: 6.8.0
+  '@codemirror/search':
+    specifier: ^6.5.1
+    version: 6.5.1
   '@codemirror/state':
     specifier: ^6.2.1
     version: 6.2.1

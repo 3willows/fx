@@ -1,17 +1,28 @@
 <script lang="ts">
-  import { minimalSetup } from "codemirror";
+  import { history, defaultKeymap, historyKeymap } from "@codemirror/commands";
+  import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from "@codemirror/autocomplete";
   import { EditorState } from "@codemirror/state";
-  import { EditorView, drawSelection } from "@codemirror/view";
+  import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
+  import { EditorView, drawSelection, highlightActiveLine, keymap } from "@codemirror/view";
+  import { indentOnInput, syntaxHighlighting, defaultHighlightStyle, bracketMatching } from "@codemirror/language";
   import { javascript } from "@codemirror/lang-javascript";
 
   export let value = "";
   let state = EditorState.create({
     doc: value,
     extensions: [
-      minimalSetup,
-      javascript(),
+      history(),
+      autocompletion(),
+      syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+      closeBrackets(),
+      bracketMatching(),
+      highlightSelectionMatches(),
+      indentOnInput(),
       drawSelection(),
+      highlightActiveLine(),
+      keymap.of([...closeBracketsKeymap, ...defaultKeymap, ...searchKeymap, ...historyKeymap, ...completionKeymap]),
       EditorState.allowMultipleSelections.of(true),
+      javascript(),
       EditorView.updateListener.of(function (e) {
         value = e.state.doc.toString();
       })

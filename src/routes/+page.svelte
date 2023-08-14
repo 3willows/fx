@@ -22,6 +22,8 @@
   $: audio.el = el;
 </script>
 
+<title>FX Playground</title>
+
 <div class="wrapper">
   <Panel title="Audio" --area="audio">
     {#if url}
@@ -51,7 +53,7 @@
       class="button"
       slot="actions"
       on:click={() => {
-        params.set([...$params, { name: "", defaultValue: 1, minValue: 0, maxValue: 1 }]);
+        params.set([...$params, { name: "", defaultValue: 0.5, minValue: 0, maxValue: 1 }]);
       }}
     >
       Add parameter
