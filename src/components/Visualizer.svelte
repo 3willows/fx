@@ -7,11 +7,13 @@
   let w: number;
   let h: number;
   $: if (canvas) {
-    canvas.width = w * window.devicePixelRatio;
-    canvas.height = h * window.devicePixelRatio;
+    const ratio = window.devicePixelRatio;
+    canvas.width = w * ratio;
+    canvas.height = h * ratio;
   }
 
   const primary = getComputedStyle(document.documentElement).getPropertyValue("--color-primary");
+  const border = getComputedStyle(document.documentElement).getPropertyValue("--color-border");
 
   function draw() {
     if (!canvas || !ctx) return requestAnimationFrame(draw);
@@ -19,13 +21,26 @@
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    waveform(dry, "#cccccc");
-    waveform(wet, primary);
+    waveform(compress(dry, 256), border);
+    waveform(compress(wet, 256), primary);
 
     requestAnimationFrame(draw);
   }
 
-  const gutter = 0;
+  function compress(amplitudes: Uint8Array, bins: number) {
+    const linearBinSize = Math.floor(amplitudes.length / bins);
+    const result = new Uint8Array(bins);
+
+    for (let i = 0; i < bins; i++) {
+      const start = i * linearBinSize;
+      const end = (i + 1) * linearBinSize;
+      result[i] = amplitudes.slice(start, end).reduce((sum, v) => sum + v, 0) / linearBinSize;
+    }
+
+    return result;
+  }
+
+  const gutter = 1;
   function waveform(data: Uint8Array, color: string) {
     if (!canvas || !ctx) return;
 
@@ -54,8 +69,8 @@
 <figure class="wrapper">
   <canvas class="canvas" bind:this={canvas} bind:clientWidth={w} bind:clientHeight={h} />
   <figcaption class="axis">
-    <span>20 Hz</span>
-    <span>20 kHz</span>
+    <span>0 Hz</span>
+    <span>24 kHz</span>
   </figcaption>
 </figure>
 

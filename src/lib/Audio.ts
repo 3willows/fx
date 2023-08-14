@@ -17,15 +17,11 @@ export default class Audio {
   #dry = this.ctx.createAnalyser();
   #wet = this.ctx.createAnalyser();
 
-  static FFT_SIZE = 1024;
-  static SMOOTHING_TIME_CONSTANT = 0.9;
+  static FFT_SIZE = 2048;
 
   constructor() {
     this.#dry.fftSize = Audio.FFT_SIZE;
     this.#wet.fftSize = Audio.FFT_SIZE;
-
-    this.#dry.smoothingTimeConstant = Audio.SMOOTHING_TIME_CONSTANT;
-    this.#wet.smoothingTimeConstant = Audio.SMOOTHING_TIME_CONSTANT;
   }
 
   set el(el: HTMLAudioElement | undefined) {
