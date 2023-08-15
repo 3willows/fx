@@ -66,7 +66,7 @@ export default class Audio {
   }
 }
 
-let n = 0;
+let n = 0n;
 
 export async function compile(ctx: AudioContext, code: string, params: Parameter[]) {
   const name = `${++n}`;
@@ -95,6 +95,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
             }
           });
 
+          // console.log(input, output);
           try {
             this.run(input, output, params);
           } catch (e) {
@@ -118,7 +119,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
   `;
 
   const file = new File([src], "fx.js");
-  const url = URL.createObjectURL(file);
+  const url = URL.createObjectURL(file.slice(0, file.size, "application/javascript"));
   await ctx.audioWorklet.addModule(url);
   URL.revokeObjectURL(url);
   return new AudioWorkletNode(ctx, "" + name);
