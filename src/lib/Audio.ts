@@ -34,6 +34,8 @@ export default class Audio {
 
   async compile(code: string, params: Parameter[]) {
     const worklet = code ? await compile(this.ctx, code, params) : undefined;
+
+    this.#worklet?.port.postMessage("disconnect");
     this.#worklet?.disconnect();
     this.#source.disconnect();
     this.#dry.disconnect();
@@ -77,10 +79,21 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
     automationRate: "k-rate"
   }));
 
+  // The weird keepalive hack is necessary because of this bug in Safari and Chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=921354
+  // Once that gets fixed, can just return `false` from `process`
+
   const src = `
     class Gain extends AudioWorkletProcessor {
-      prev = Date.now();
- 
+      keepalive = true;
+
+      constructor() {
+        super();
+
+        this.port.onmessage = msg => {
+          if (msg.data === "disconnect") this.keepalive = false;
+        };
+      }
+
       process(inputs, outputs, parameters) {
         const inputChannels = inputs[0];
         const outputChannels = outputs[0];
@@ -95,17 +108,16 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
             }
           });
 
-          // console.log(input, output);
           try {
             this.run(input, output, params);
           } catch (e) {
             console.error(e);
           }
         }
-    
-        return false;
+
+        return this.keepalive;
       }
-    
+
       run(input, output, parameters) {
         ${code}
       }
@@ -114,7 +126,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
         return ${JSON.stringify(description)};
       }
     }
-    
+
     registerProcessor(${name}, Gain);
   `;
 

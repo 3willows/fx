@@ -68,6 +68,7 @@
         accept={["audio/wav"]}
         on:upload={e => {
           file = e.detail.file;
+          audio.ctx.resume();
         }}
       />
     {/if}
