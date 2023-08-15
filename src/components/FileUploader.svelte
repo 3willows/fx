@@ -9,7 +9,7 @@
 </script>
 
 <div class="wrapper">
-  <p>
+  <p class="prompt">
     {#if filename}
       {filename}
     {:else}
@@ -52,5 +52,9 @@
     top: 0;
     left: -100%;
     cursor: pointer;
+  }
+
+  .prompt {
+    margin: 0;
   }
 </style>

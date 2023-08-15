@@ -9,6 +9,7 @@
   import Audio from "$lib/Audio";
   import { code, params } from "$lib/filter";
   import Button from "$components/Button.svelte";
+  import Modal from "$components/Modal.svelte";
 
   let file: File;
   let url = "";
@@ -42,6 +43,8 @@
 
   let el: HTMLAudioElement;
   $: audio.el = el;
+
+  let openHelp: () => void;
 </script>
 
 <title>FX Playground</title>
@@ -49,7 +52,10 @@
 <div class="wrapper">
   <header class="header">
     <h1 class="title">FXPlayground</h1>
-    <Button on:click={share}>Share<Icon name="share" width={12} height={12} /></Button>
+    <div class="actions">
+      <Button on:click={openHelp}>Help<Icon name="help" width={12} height={12} /></Button>
+      <Button on:click={share}>Share<Icon name="share" width={12} height={12} /></Button>
+    </div>
   </header>
 
   <Panel title="Audio" --area="audio">
@@ -89,6 +95,33 @@
   </Panel>
 </div>
 
+<Modal title="Help" bind:show={openHelp}>
+  <p>
+    Upload an audio file and click play. As you edit the code below, you'll hear the modified audio and see the
+    visualization change.
+  </p>
+  <p>
+    There are three special variables: <code>input</code>, <code>output</code> and <code>parameters</code>.
+    <code>input</code>
+    contains the unmodified samples from the audio file. Your effect should write the corresponding modified samples to the
+    <code>output</code> array.
+  </p>
+  <p>
+    <code>parameters</code> is an object containing the parameters defined to the right of the code editor. For each parameter,
+    the text input controls its name, the number inputs control its minimum and maximum values and the slider controls its
+    actual value.
+  </p>
+  <p>
+    As you play the audio, the light gray waveform is the dry (original, unmodified) audio. The dark purple waveform is
+    your filtered audio.
+  </p>
+  <p>
+    Your work is automatically saved. To share a filter, click the "Share" button and send the URL that gets copied to
+    your clipboard.
+  </p>
+  <p>Have fun!</p>
+</Modal>
+
 <style>
   .wrapper {
     height: 100%;
@@ -109,5 +142,10 @@
 
   .title {
     text-transform: lowercase;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
   }
 </style>

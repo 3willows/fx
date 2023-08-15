@@ -1,6 +1,6 @@
 <script lang="ts">
   import icons from "../icons.svg";
-  export let name: "add" | "remove" | "share";
+  export let name: "add" | "help" | "remove" | "share";
   export let width = 0;
   export let height = 0;
 </script>

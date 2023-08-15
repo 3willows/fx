@@ -15,10 +15,10 @@
             <input class="input" bind:value={parameter.name} placeholder="Parameter name" />
           </td>
           <td class="narrow">
-            <input class="input number" bind:value={parameter.minValue} />
+            <input class="input" type="number" bind:value={parameter.minValue} />
           </td>
           <td class="narrow">
-            <input class="input number" bind:value={parameter.maxValue} />
+            <input class="input" type="number" bind:value={parameter.maxValue} />
           </td>
           <td class="wide range">
             <Range bind:value={parameter.defaultValue} min={parameter.minValue} max={parameter.maxValue} />
