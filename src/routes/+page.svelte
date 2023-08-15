@@ -4,15 +4,37 @@
   import Parameters from "$components/Parameters.svelte";
   import Panel from "$components/Panel.svelte";
   import Visualizer from "$components/Visualizer.svelte";
+  import Icon from "$components/Icon.svelte";
 
   import Audio from "$lib/Audio";
   import { code, params } from "$lib/filter";
+  import Button from "$components/Button.svelte";
 
   let file: File;
   let url = "";
   $: {
     if (url) URL.revokeObjectURL(url);
     if (file) url = URL.createObjectURL(file);
+  }
+
+  const search = new URLSearchParams(window.location.search);
+  try {
+    const c = search.get("code");
+    if (c) code.set(atob(c));
+
+    const p = search.get("params");
+    if (p) params.set(JSON.parse(atob(p)));
+  } catch (e) {
+    console.error(e);
+  }
+
+  function share() {
+    const search = new URLSearchParams();
+    search.set("code", btoa($code));
+    search.set("params", btoa(JSON.stringify($params)));
+
+    history.replaceState("", "", "?" + search.toString());
+    navigator.clipboard.writeText(window.location.href);
   }
 
   const audio = new Audio();
@@ -25,6 +47,11 @@
 <title>FX Playground</title>
 
 <div class="wrapper">
+  <header class="header">
+    <h1 class="title">FXPlayground</h1>
+    <Button on:click={share}>Share<Icon name="share" width={12} height={12} /></Button>
+  </header>
+
   <Panel title="Audio" --area="audio">
     {#if url}
       <div>
@@ -49,18 +76,15 @@
   </Panel>
 
   <Panel title="Parameters" --area="params">
-    <button
-      class="button"
+    <Button
       slot="actions"
       on:click={() => {
         params.set([...$params, { name: "", defaultValue: 0.5, minValue: 0, maxValue: 1 }]);
       }}
     >
       Add parameter
-      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
-        <path d="M11,5H7V1A1,1,0,0,0,5,1V5H1A1,1,0,0,0,1,7H5v4a1,1,0,0,0,2,0V7h4a1,1,0,0,0,0-2Z" fill="currentColor" />
-      </svg>
-    </button>
+      <Icon name="add" width={12} height={12} />
+    </Button>
     <Parameters bind:parameters={$params} />
   </Panel>
 </div>
@@ -69,28 +93,21 @@
   .wrapper {
     height: 100%;
     display: grid;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: "audio audio" "waveform waveform" "code params";
+    grid-template-areas: "header header" "audio audio" "waveform waveform" "code params";
     padding: 1rem 2rem 2rem;
     gap: 2rem;
   }
 
-  .button {
+  .header {
+    grid-area: header;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0 0.75rem;
-    border: none;
-    font-size: var(--text-sm);
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 2rem;
-    color: var(--color-primary);
-    background-color: var(--color-border);
   }
 
-  .button:hover {
-    color: var(--color-text-primary);
+  .title {
+    text-transform: lowercase;
   }
 </style>

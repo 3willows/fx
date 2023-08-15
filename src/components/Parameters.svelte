@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Parameter } from "$lib/Audio";
   import Range from "$components/Range.svelte";
+  import Icon from "./Icon.svelte";
 
   export let parameters: Parameter[] = [];
 </script>
@@ -24,12 +25,7 @@
           </td>
           <td class="button">
             <button class="remove" on:click={() => (parameters = parameters.filter((_, i) => i !== idx))}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
-                <path
-                  d="M10.707,1.293a1,1,0,0,0-1.414,0L6,4.586,2.707,1.293A1,1,0,0,0,1.293,2.707L4.586,6,1.293,9.293a1,1,0,1,0,1.414,1.414L6,7.414l3.293,3.293a1,1,0,0,0,1.414-1.414L7.414,6l3.293-3.293A1,1,0,0,0,10.707,1.293Z"
-                  fill="currentColor"
-                />
-              </svg>
+              <Icon name="remove" width={12} height={12} />
             </button>
           </td>
         </tr>

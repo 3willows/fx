@@ -21,24 +21,26 @@
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    waveform(compress(dry, 256), border);
-    waveform(compress(wet, 256), primary);
+    waveform(dry, border);
+    waveform(wet, primary);
 
     requestAnimationFrame(draw);
   }
 
-  function compress(amplitudes: Uint8Array, bins: number) {
-    const linearBinSize = Math.floor(amplitudes.length / bins);
-    const result = new Uint8Array(bins);
+  // function compress(amplitudes: Uint8Array, bins: number) {
+  //   const result = new Uint8Array(bins);
 
-    for (let i = 0; i < bins; i++) {
-      const start = i * linearBinSize;
-      const end = (i + 1) * linearBinSize;
-      result[i] = amplitudes.slice(start, end).reduce((sum, v) => sum + v, 0) / linearBinSize;
-    }
+  //   const numbers: number[] = [];
+  //   for (let i = 0; i < bins; i++) {
+  //     const start = Math.floor(Math.pow(1.1, i));
+  //     const end = Math.floor(Math.pow(1.1, i + 1));
+  //     numbers[i] = end - start;
+  //     result[i] = amplitudes.slice(start, end).reduce((sum, v) => sum + v, 0) / (end - start);
+  //   }
 
-    return result;
-  }
+  //   console.log(numbers);
+  //   return result;
+  // }
 
   const gutter = 1;
   function waveform(data: Uint8Array, color: string) {

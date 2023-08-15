@@ -17,7 +17,7 @@ export default class Audio {
   #dry = this.ctx.createAnalyser();
   #wet = this.ctx.createAnalyser();
 
-  static FFT_SIZE = 2048;
+  static FFT_SIZE = 512;
 
   constructor() {
     this.#dry.fftSize = Audio.FFT_SIZE;
@@ -95,7 +95,11 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
             }
           });
 
-          this.run(input, output, params);
+          try {
+            this.run(input, output, params);
+          } catch (e) {
+            console.error(e);
+          }
         }
     
         return false;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { history, defaultKeymap, historyKeymap } from "@codemirror/commands";
-  import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from "@codemirror/autocomplete";
+  import { closeBrackets, closeBracketsKeymap, completionKeymap } from "@codemirror/autocomplete";
   import { EditorState } from "@codemirror/state";
   import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
   import { EditorView, drawSelection, highlightActiveLine, keymap } from "@codemirror/view";
@@ -12,7 +12,6 @@
     doc: value,
     extensions: [
       history(),
-      autocompletion(),
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
       closeBrackets(),
       bracketMatching(),
