@@ -83,7 +83,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
   // Once that gets fixed, can just return `false` from `process`
 
   const src = `
-    class Gain extends AudioWorkletProcessor {
+    class Filter extends AudioWorkletProcessor {
       keepalive = true;
 
       constructor() {
@@ -127,7 +127,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
       }
     }
 
-    registerProcessor(${name}, Gain);
+    registerProcessor(${name}, Filter);
   `;
 
   const file = new File([src], "fx.js");

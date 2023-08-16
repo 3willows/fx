@@ -5,6 +5,7 @@
 ::backdrop {
   --font-code: "Cartograph CF", mono;
   --color-primary: #7c3aed;
+  --color-negative: #e54f6d;
   --color-border: #e4d7fa;
   --color-border-hover: #c4b7da;
   --color-text-primary: #1c2321;

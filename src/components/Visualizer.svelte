@@ -12,8 +12,8 @@
     canvas.height = h * ratio;
   }
 
-  const primary = getComputedStyle(document.documentElement).getPropertyValue("--color-primary");
-  const border = getComputedStyle(document.documentElement).getPropertyValue("--color-border");
+  const wetColor = getComputedStyle(document.documentElement).getPropertyValue("--color-primary");
+  const dryColor = getComputedStyle(document.documentElement).getPropertyValue("--color-negative");
 
   function draw() {
     if (!canvas || !ctx) return requestAnimationFrame(draw);
@@ -21,8 +21,10 @@
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    waveform(dry, border);
-    waveform(wet, primary);
+    const w = canvas.width - stroke;
+    const h = canvas.height - stroke;
+    bar(ctx, w, h, wet, wetColor);
+    line(ctx, w, h, dry, dryColor);
 
     requestAnimationFrame(draw);
   }
@@ -43,23 +45,64 @@
   // }
 
   const gutter = 1;
-  function waveform(data: Uint8Array, color: string) {
-    if (!canvas || !ctx) return;
+  const stroke = 4;
 
+  function line(ctx: CanvasRenderingContext2D, w: number, h: number, data: Uint8Array, color: string) {
     const gutters = gutter * (data.length - 1);
-    const width = Math.floor((canvas.width - gutter * (data.length - 1)) / data.length);
+    const width = Math.floor((w - gutter * (data.length - 1)) / data.length);
     const total = width * data.length + gutters;
-    let x = Math.floor((canvas.width - total) / 2);
+    let x = Math.floor((w - total) / 2) + width / 2;
 
-    let height = 0;
+    ctx.beginPath();
+    let some = false;
+
+    let y = 0;
     for (let i = 0; i < data.length; i++) {
-      height = Math.max((canvas.height * (data[i] || 0)) / 255, 4);
+      some = some || Boolean(data[i] || 0);
 
-      ctx.fillStyle = color;
-      ctx.fillRect(x, canvas.height - height, width, height);
+      y = h - (h * (data[i] || 0)) / 255;
+      if (i === 0) ctx.moveTo(x - width / 2, y);
+      else if (i === data.length - 1) ctx.lineTo(x + width / 2, y);
+      else ctx.lineTo(x, y);
 
       x += width + gutter;
     }
+
+    ctx.lineWidth = stroke + 8;
+    ctx.strokeStyle = "#ffffff";
+    ctx.stroke();
+
+    ctx.lineWidth = stroke;
+    ctx.strokeStyle = color;
+    if (some) ctx.stroke();
+
+    ctx.closePath();
+  }
+
+  function bar(ctx: CanvasRenderingContext2D, w: number, h: number, data: Uint8Array, color: string) {
+    const gutters = gutter * (data.length - 1);
+    const width = Math.floor((w - gutter * (data.length - 1)) / data.length);
+    const total = width * data.length + gutters;
+    let x = Math.floor((w - total) / 2);
+
+    ctx.beginPath();
+    let some = false;
+
+    let height = 0;
+    for (let i = 0; i < data.length; i++) {
+      some = some || Boolean(data[i] || 0);
+
+      height = Math.max((h * (data[i] || 0)) / 255, 4);
+
+      ctx.rect(x, canvas.height - height, width, height);
+
+      x += width + gutter;
+    }
+
+    ctx.fillStyle = color;
+    if (some) ctx.fill();
+
+    ctx.closePath();
   }
 
   draw();
