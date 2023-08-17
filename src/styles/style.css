@@ -4,17 +4,23 @@
 :root,
 ::backdrop {
   --font-code: "Cartograph CF", mono;
-  --color-primary: #7c3aed;
+  --color-primary: #9159f1;
   --color-negative: #e54f6d;
+  --color-background: #ffffff;
   --color-border: #e4d7fa;
-  --color-border-hover: #c4b7da;
-  --color-text-primary: #1c2321;
-  --color-text-secondary: #1c232199;
+  --color-border-hover: #ceb6f6;
+  --color-text-primary: #2a2036;
+  --color-text-secondary: #9787ab;
   --text-sm: 0.75rem;
   --text-md: 1rem;
   --text-lg: 1.25rem;
   --radius-sm: 0.25rem;
   --radius-lg: 0.5rem;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-background);
 }
 
 html {

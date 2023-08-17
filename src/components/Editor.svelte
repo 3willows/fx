@@ -56,4 +56,41 @@
     letter-spacing: 0;
     padding: 1rem;
   }
+
+  /* keywords */
+  .editor :global(.ͼb) {
+    color: #7631ed;
+  }
+
+  /* numbers */
+  .editor :global(.ͼd) {
+    color: #f07178;
+  }
+
+  /* strings */
+  .editor :global(.ͼe) {
+    color: #40b546;
+  }
+
+  /* identifiers */
+  .editor :global(.ͼg) {
+    color: #3374ff;
+  }
+
+  /* comments */
+  .editor :global(.ͼm) {
+    color: #ceb6f6;
+  }
+
+  .editor :global(.cm-activeLine) {
+    background-color: color-mix(in srgb, var(--color-border) 50%, transparent);
+  }
+
+  .editor :global(.cm-selectionBackground),
+  .editor :global(.cm-matchingBracket),
+  .editor :global(.cm-selectionMatch),
+  .editor :global(.cm-selectionMatch > *) {
+    background-color: var(--color-border-hover);
+    color: var(--color-text-primary);
+  }
 </style>

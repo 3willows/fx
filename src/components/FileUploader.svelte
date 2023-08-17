@@ -42,7 +42,7 @@
   }
 
   .wrapper:hover {
-    border-color: #dddddd;
+    border-color: var(--color-border-hover);
   }
 
   .input {
