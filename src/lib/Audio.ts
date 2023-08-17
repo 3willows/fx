@@ -92,6 +92,8 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
         this.port.onmessage = msg => {
           if (msg.data === "disconnect") this.keepalive = false;
         };
+
+        Object.defineProperties(this, { process: { value: this.process }, run: { value: this.run } });
       }
 
       process(inputs, outputs, parameters) {
