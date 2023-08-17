@@ -95,8 +95,18 @@
     cursor: pointer;
   }
 
-  .remove:hover {
-    background-color: var(--color-border);
+  .remove:hover,
+  .remove:focus-visible {
+    color: var(--color-negative);
+  }
+
+  .remove:focus {
+    outline: 0;
+  }
+
+  .remove:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
   }
 
   .input {
@@ -105,6 +115,23 @@
     width: 100%;
     height: 100%;
     padding: 0.75rem;
+  }
+
+  tr:first-child td:first-child .input {
+    border-top-left-radius: var(--radius-lg);
+  }
+
+  tr:first-child td:last-child .remove {
+    border-top-right-radius: var(--radius-lg);
+  }
+
+  .input:focus {
+    outline: 0;
+  }
+
+  .input:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
   }
 
   .range {
@@ -126,8 +153,15 @@
     height: 1rem;
     width: 0.5rem;
     background-color: #ffffff;
-    /* border-radius: 50%; */
     border: 2px solid var(--color-border);
-    /* box-shadow: -10.5rem 0 0 10rem var(--color-primary); */
+  }
+
+  .range:focus {
+    outline: 0;
+  }
+
+  .range:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 </style>

@@ -7,19 +7,19 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0 0.75rem;
-    height: 1.5rem;
-    line-height: 1.5rem;
+    padding: 0 1rem;
+    height: 2rem;
     border: none;
     font-size: var(--text-sm);
     font-weight: bold;
     cursor: pointer;
+    text-transform: uppercase;
     border-radius: 2rem;
     color: var(--color-primary);
     background-color: var(--color-border);
   }
 
   button:hover {
-    color: var(--color-text-primary);
+    background-color: var(--color-border-hover);
   }
 </style>

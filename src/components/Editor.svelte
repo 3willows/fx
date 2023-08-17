@@ -53,6 +53,7 @@
   .editor :global(.cm-scroller) {
     overflow: auto;
     font-family: var(--font-code);
+    letter-spacing: 0;
     padding: 1rem;
   }
 </style>

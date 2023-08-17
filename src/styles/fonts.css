@@ -8,8 +8,8 @@
 
 @font-face {
   font-family: "Cartograph CF";
-  src: url("./cartographcf-regularitalic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
+  src: url("./cartographcf-heavy.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
   font-display: block;
 }

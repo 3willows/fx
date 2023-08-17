@@ -43,6 +43,4 @@ for (let i = 0; i < input.length; i++) {
 
   // set the output to the moving average
   output[i] = sum / this.samples.length;
-
-  // output[i] *= parameters.gain;
 }

@@ -8,3 +8,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" {width} {height}>
   <use href={icons + "#" + name} />
 </svg>
+
+<style>
+  svg {
+    flex-shrink: 0;
+  }
+</style>

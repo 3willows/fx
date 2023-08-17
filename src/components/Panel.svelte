@@ -24,11 +24,13 @@
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 0;
+    height: 3rem;
     color: var(--color-text-secondary);
   }
 
   .title {
-    font-size: var(--text-md);
+    font-size: var(--text-lg);
     letter-spacing: -0.05ch;
+    font-weight: bold;
   }
 </style>

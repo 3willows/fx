@@ -9,19 +9,30 @@
   --color-border: #e4d7fa;
   --color-border-hover: #c4b7da;
   --color-text-primary: #1c2321;
-  --color-text-secondary: #666666;
+  --color-text-secondary: #1c232199;
   --text-sm: 0.75rem;
   --text-md: 1rem;
-  --radius-sm: 0.125rem;
+  --text-lg: 1.25rem;
+  --radius-sm: 0.25rem;
   --radius-lg: 0.5rem;
 }
 
 html {
   font-family: var(--font-code);
+  letter-spacing: -0.1ch;
 }
 
 body {
   color: var(--color-text-primary);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration-color: var(--color-border);
+}
+
+a:hover {
+  text-decoration-color: var(--color-primary);
 }
 
 p:not(:last-child) {

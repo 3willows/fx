@@ -39,7 +39,10 @@
   }
 
   const audio = new Audio();
-  $: audio.compile($code, $params);
+  $: {
+    audio.compile($code, $params);
+    history.replaceState("", "", "/");
+  }
 
   let el: HTMLAudioElement;
   $: audio.el = el;
@@ -52,9 +55,11 @@
 <div class="wrapper">
   <header class="header">
     <h1 class="title">FXPlayground</h1>
+    <span class="byline">by <a class="author" href="https://jakelazaroff.com">Jake Lazaroff</a></span>
+
     <div class="actions">
-      <Button on:click={openHelp}>Help<Icon name="help" width={12} height={12} /></Button>
-      <Button on:click={share}>Share<Icon name="share" width={12} height={12} /></Button>
+      <Button on:click={openHelp}><span>Help</span><Icon name="help" width={12} height={12} /></Button>
+      <Button on:click={share}><span>Share</span><Icon name="share" width={12} height={12} /></Button>
     </div>
   </header>
 
@@ -89,7 +94,7 @@
         params.set([...$params, { name: "", defaultValue: 0.5, minValue: 0, maxValue: 1 }]);
       }}
     >
-      Add parameter
+      <span>Add parameter</span>
       <Icon name="add" width={12} height={12} />
     </Button>
     <Parameters bind:parameters={$params} />
@@ -103,6 +108,8 @@
   </p>
   <p>
     There are three special variables: <code>input</code>, <code>output</code> and <code>parameters</code>.
+  </p>
+  <p>
     <code>input</code>
     contains the unmodified samples from the audio file. Your effect should write the corresponding modified samples to the
     <code>output</code> array.
@@ -112,10 +119,8 @@
     the text input controls its name, the number inputs control its minimum and maximum values and the slider controls its
     actual value.
   </p>
-  <p>
-    As you play the audio, the light gray waveform is the dry (original, unmodified) audio. The dark purple waveform is
-    your filtered audio.
-  </p>
+  <p>You can store state by setting properties on <code>this</code>.</p>
+  <p>The purple visualizer bars represent your filtered audio. The magenta line represents the original dry signal.</p>
   <p>
     Your work is automatically saved. To share a filter, click the "Share" button and send the URL that gets copied to
     your clipboard.
@@ -125,28 +130,51 @@
 
 <style>
   .wrapper {
-    height: 100%;
     display: grid;
     grid-template-rows: auto auto auto 1fr;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "header header" "audio audio" "waveform waveform" "code params";
+    grid-template-columns: 1fr;
+    grid-template-areas: "header" "audio" "waveform" "code" "params";
     padding: 1rem 2rem 2rem;
     gap: 2rem;
   }
 
+  @media screen and (min-width: 960px) {
+    .wrapper {
+      height: 100%;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "header header" "audio audio" "waveform waveform" "code params";
+    }
+  }
+
   .header {
     grid-area: header;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "title actions" "byline actions";
   }
 
   .title {
+    grid-area: title;
     text-transform: lowercase;
+    letter-spacing: -0.125ch;
+    line-height: 1.25;
+  }
+
+  .byline {
+    grid-area: byline;
+    font-size: var(--text-sm);
+  }
+
+  .author {
+    font-weight: bold;
+    text-decoration-thickness: 2px;
   }
 
   .actions {
+    grid-area: actions;
     display: flex;
+    align-items: center;
     gap: 1rem;
   }
 </style>
