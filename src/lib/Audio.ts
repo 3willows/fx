@@ -104,14 +104,14 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
           const input = inputChannels[channel];
           const output = outputChannels[channel];
 
-          const params = new Proxy({}, {
+          const parameters = new Proxy({}, {
             get(target, prop) {
               return params[prop]?.[0] || 0;
             }
           });
 
           try {
-            this.run(input, output, params);
+            this.run(input, output, parameters);
           } catch (e) {
             console.error(e);
           }
