@@ -53,6 +53,7 @@
   .editor :global(.cm-scroller) {
     overflow: auto;
     font-family: var(--font-code);
+    line-height: 1.5;
     letter-spacing: 0;
     padding: 1rem;
   }
@@ -92,5 +93,10 @@
   .editor :global(.cm-selectionMatch > *) {
     background-color: var(--color-border-hover);
     color: var(--color-text-primary);
+  }
+
+  .editor :global(::selection) {
+    background-color: unset;
+    color: unset;
   }
 </style>

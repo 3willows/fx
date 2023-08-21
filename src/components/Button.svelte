@@ -1,4 +1,8 @@
-<button on:click>
+<script lang="ts">
+  export let size: "sm" | "md" = "md";
+</script>
+
+<button on:click class:sm={size === "sm"} class:md={size === "md"}>
   <slot />
 </button>
 
@@ -6,9 +10,6 @@
   button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0 1rem;
-    height: 2rem;
     border: none;
     font-size: var(--text-sm);
     font-weight: bold;
@@ -17,6 +18,19 @@
     border-radius: 2rem;
     color: var(--color-primary);
     background-color: var(--color-border);
+    transition: background-color 0.25s ease;
+  }
+
+  button.sm {
+    gap: 0.5rem;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  button.md {
+    gap: 0.5rem;
+    padding: 0 1rem;
+    height: 2rem;
   }
 
   button:hover {

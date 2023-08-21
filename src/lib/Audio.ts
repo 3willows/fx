@@ -46,7 +46,7 @@ export default class Audio {
   }
 
   // param(key: string, value: number) {
-  //   this.#worklet?.parameters.get(key)?.setValueAtTime(value, 0);
+  //   this.#worklet?.params.get(key)?.setValueAtTime(value, 0);
   // }
 
   graphs() {
@@ -96,7 +96,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
         Object.defineProperties(this, { process: { value: this.process }, run: { value: this.run } });
       }
 
-      process(inputs, outputs, parameters) {
+      process(inputs, outputs, params) {
         const inputChannels = inputs[0];
         const outputChannels = outputs[0];
 
@@ -106,7 +106,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
 
           const params = new Proxy({}, {
             get(target, prop) {
-              return parameters[prop]?.[0] || 0;
+              return params[prop]?.[0] || 0;
             }
           });
 
@@ -120,7 +120,7 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
         return this.keepalive;
       }
 
-      run(input, output, parameters) {
+      run(input, output, params) {
         ${code}
       }
 
@@ -136,5 +136,5 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
   const url = URL.createObjectURL(file.slice(0, file.size, "application/javascript"));
   await ctx.audioWorklet.addModule(url);
   URL.revokeObjectURL(url);
-  return new AudioWorkletNode(ctx, "" + name);
+  return new AudioWorkletNode(ctx, name);
 }

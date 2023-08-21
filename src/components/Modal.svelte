@@ -65,5 +65,11 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
+    color: var(--color-border-hover);
+    transition: color 0.25s ease;
+  }
+
+  .close:hover {
+    color: var(--color-text);
   }
 </style>

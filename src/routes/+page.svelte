@@ -5,6 +5,7 @@
   import Panel from "$components/Panel.svelte";
   import Visualizer from "$components/Visualizer.svelte";
   import Icon from "$components/Icon.svelte";
+  import Meta from "$components/Meta.svelte";
 
   import Audio from "$lib/Audio";
   import { code, params } from "$lib/filter";
@@ -47,10 +48,17 @@
   let el: HTMLAudioElement;
   $: audio.el = el;
 
-  let openHelp: () => void;
+  let openGeneralHelp: () => void;
+  let openCodeHelp: () => void;
+  let openParametersHelp: () => void;
 </script>
 
-<title>FX Playground</title>
+<Meta
+  title="fxplayground"
+  description="fxplayground is a live coding audio playground."
+  url="https://fxplayground.pages.dev"
+  image=""
+/>
 
 <div class="wrapper">
   <header class="header">
@@ -58,8 +66,10 @@
     <span class="byline">by <a class="author" href="https://jakelazaroff.com">Jake Lazaroff</a></span>
 
     <div class="actions">
-      <Button on:click={openHelp}><span>Help</span><Icon name="help" width={12} height={12} /></Button>
-      <Button on:click={share}><span>Share</span><Icon name="share" width={12} height={12} /></Button>
+      <Button on:click={openGeneralHelp}>
+        <span class="label">Help</span><Icon name="help" width={12} height={12} />
+      </Button>
+      <Button on:click={share}><span class="label">Share</span><Icon name="share" width={12} height={12} /></Button>
     </div>
   </header>
 
@@ -84,10 +94,16 @@
   </Panel>
 
   <Panel title="Code" --area="code">
+    <Button slot="help" size="sm" on:click={openCodeHelp}>
+      <Icon name="help" width={12} height={12} />
+    </Button>
     <Editor bind:value={$code} />
   </Panel>
 
   <Panel title="Parameters" --area="params">
+    <Button slot="help" size="sm" on:click={openParametersHelp}>
+      <Icon name="help" width={12} height={12} />
+    </Button>
     <Button
       slot="actions"
       on:click={() => {
@@ -97,17 +113,28 @@
       <span>Add parameter</span>
       <Icon name="add" width={12} height={12} />
     </Button>
-    <Parameters bind:parameters={$params} />
+    <Parameters bind:params={$params} />
   </Panel>
 </div>
 
-<Modal title="Help" bind:show={openHelp}>
+<Modal title="Help" bind:show={openGeneralHelp}>
+  <p><strong>fxplayground</strong> is a live coding audio playground.</p>
   <p>
-    Upload an audio file and click play. As you edit the code below, you'll hear the modified audio and see the
-    visualization change.
+    To get started, upload an audio file and click play. As you edit the code and parameters below, you'll hear the
+    modified audio and see the visualization change.
   </p>
+  <p>The purple visualizer bars represent your filtered audio. The magenta line represents the original dry signal.</p>
   <p>
-    There are three special variables: <code>input</code>, <code>output</code> and <code>parameters</code>.
+    Your work is automatically saved. To share a filter, click the "Share" button and send the URL that gets copied to
+    your clipboard.
+  </p>
+  <p>Have fun!</p>
+</Modal>
+
+<Modal title="Code" bind:show={openCodeHelp}>
+  <p>
+    There are four special variables: <code>input</code>, <code>output</code>, <code>params</code> and
+    <code>sampleRate</code>.
   </p>
   <p>
     <code>input</code>
@@ -115,17 +142,22 @@
     <code>output</code> array.
   </p>
   <p>
-    <code>parameters</code> is an object containing the parameters defined to the right of the code editor. For each parameter,
-    the text input controls its name, the number inputs control its minimum and maximum values and the slider controls its
-    actual value.
+    <code>params</code> is an object containing the current value of each parameter defined to the right of the code editor.
   </p>
+  <p><code>sampleRate</code> contains the sample rate measured in hertz for a single channel.</p>
   <p>You can store state by setting properties on <code>this</code>.</p>
-  <p>The purple visualizer bars represent your filtered audio. The magenta line represents the original dry signal.</p>
+</Modal>
+
+<Modal title="Parameters" bind:show={openParametersHelp}>
+  <p>Parameters let you experiment with your effect in real time.</p>
   <p>
-    Your work is automatically saved. To share a filter, click the "Share" button and send the URL that gets copied to
-    your clipboard.
+    The first column of the table is the parameter's name. The second and third columns are the minimum and maximum
+    values. The slider controls the actual value seen by your code.
   </p>
-  <p>Have fun!</p>
+  <p>
+    You can access parameters from your code by using the parameter's name as a key on the <code>params</code> object.
+    For example, to access the "gain" parameter, you'd write <code>params.gain</code>.
+  </p>
 </Modal>
 
 <style>
@@ -176,5 +208,15 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+
+  .label {
+    display: none;
+  }
+
+  @media (min-width: 540px) {
+    .label {
+      display: block;
+    }
   }
 </style>

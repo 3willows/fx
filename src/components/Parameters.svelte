@@ -3,13 +3,13 @@
   import Range from "$components/Range.svelte";
   import Icon from "./Icon.svelte";
 
-  export let parameters: Parameter[] = [];
+  export let params: Parameter[] = [];
 </script>
 
 <div class="wrapper">
   <table>
     <tbody>
-      {#each parameters as parameter, idx}
+      {#each params as parameter, idx}
         <tr>
           <td class="wide">
             <input class="input" bind:value={parameter.name} placeholder="Parameter name" />
@@ -24,7 +24,7 @@
             <Range bind:value={parameter.defaultValue} min={parameter.minValue} max={parameter.maxValue} />
           </td>
           <td class="button">
-            <button class="remove" on:click={() => (parameters = parameters.filter((_, i) => i !== idx))}>
+            <button class="remove" on:click={() => (params = params.filter((_, i) => i !== idx))}>
               <Icon name="remove" width={12} height={12} />
             </button>
           </td>
