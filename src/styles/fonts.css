@@ -1,14 +1,14 @@
 @font-face {
-  font-family: "Cartograph CF";
-  src: url("./cartographcf-regular.woff2") format("woff2");
+  font-family: "JetBrains Mono";
+  src: url("./jetbrainsmono-regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: block;
 }
 
 @font-face {
-  font-family: "Cartograph CF";
-  src: url("./cartographcf-heavy.woff2") format("woff2");
+  font-family: "JetBrains Mono";
+  src: url("./jetbrainsmono-extrabold.woff2") format("woff2");
   font-weight: 900;
   font-style: normal;
   font-display: block;

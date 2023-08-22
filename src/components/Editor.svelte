@@ -8,6 +8,11 @@
   import { javascript } from "@codemirror/lang-javascript";
 
   export let value = "";
+  export function setValue(val: string) {
+    value = val;
+    editor.dispatch({ changes: { from: 0, to: editor.state.doc.length, insert: val } });
+  }
+
   let state = EditorState.create({
     doc: value,
     extensions: [
@@ -29,7 +34,8 @@
   });
 
   let el: HTMLDivElement;
-  $: new EditorView({ state, parent: el });
+  let editor: EditorView;
+  $: editor = new EditorView({ state, parent: el });
 </script>
 
 <div class="editor" bind:this={el} />

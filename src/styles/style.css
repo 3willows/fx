@@ -3,7 +3,7 @@
 
 :root,
 ::backdrop {
-  --font-code: "Cartograph CF", mono;
+  --font-code: "JetBrains Mono", mono;
   --color-primary: #9159f1;
   --color-negative: #e54f6d;
   --color-background: #ffffff;

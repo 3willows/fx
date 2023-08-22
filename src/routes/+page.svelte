@@ -6,9 +6,10 @@
   import Visualizer from "$components/Visualizer.svelte";
   import Icon from "$components/Icon.svelte";
   import Meta from "$components/Meta.svelte";
+  import Select from "$components/Select.svelte";
 
   import Audio from "$lib/Audio";
-  import { code, params } from "$lib/filter";
+  import { presets, code, params } from "$lib/filter";
   import Button from "$components/Button.svelte";
   import Modal from "$components/Modal.svelte";
 
@@ -42,12 +43,13 @@
   const audio = new Audio();
   $: {
     audio.compile($code, $params);
-    history.replaceState("", "", "/");
+    if (window.location.search) history.replaceState("", "", "/");
   }
 
   let el: HTMLAudioElement;
   $: audio.el = el;
 
+  let setCode: (val: string) => void;
   let openGeneralHelp: () => void;
   let openCodeHelp: () => void;
   let openParametersHelp: () => void;
@@ -66,6 +68,23 @@
     <span class="byline">by <a class="author" href="https://jakelazaroff.com">Jake Lazaroff</a></span>
 
     <div class="actions">
+      <Select
+        on:change={e => {
+          if (!e.currentTarget) return;
+          if (!("value" in e.currentTarget)) return;
+
+          const i = Number(e.currentTarget.value);
+          const preset = presets[i];
+          if (!preset) return;
+
+          setCode(preset.code);
+          params.set(preset.params);
+        }}
+      >
+        {#each presets as preset, i}
+          <option value={i}>{preset.name}</option>
+        {/each}
+      </Select>
       <Button on:click={openGeneralHelp}>
         <span class="label">Help</span><Icon name="help" width={12} height={12} />
       </Button>
@@ -97,7 +116,7 @@
     <Button slot="help" size="sm" on:click={openCodeHelp}>
       <Icon name="help" width={12} height={12} />
     </Button>
-    <Editor bind:value={$code} />
+    <Editor bind:value={$code} bind:setValue={setCode} />
   </Panel>
 
   <Panel title="Parameters" --area="params">
@@ -170,7 +189,7 @@
     gap: 2rem;
   }
 
-  @media screen and (min-width: 960px) {
+  @media (min-width: 960px) {
     .wrapper {
       height: 100%;
       grid-template-columns: 1fr 1fr;

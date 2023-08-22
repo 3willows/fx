@@ -53,10 +53,17 @@
     vertical-align: middle;
     height: 2.5rem;
     border: 1px solid var(--color-border);
+    border-bottom: none;
   }
 
   tr:first-child td {
     border-top: none;
+  }
+
+  @media (min-width: 960px) {
+    tr:last-child td {
+      border-bottom: 1px solid var(--color-border);
+    }
   }
 
   td:first-child {
@@ -132,36 +139,5 @@
   .input:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: -2px;
-  }
-
-  .range {
-    overflow: hidden;
-  }
-
-  .range::-webkit-slider-runnable-track,
-  .range::-moz-range-track {
-    background-color: var(--color-border);
-    height: 0.25rem;
-    border-radius: 0.125rem;
-  }
-
-  .range::-webkit-slider-thumb,
-  .range::-moz-range-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-
-    height: 1rem;
-    width: 0.5rem;
-    background-color: #ffffff;
-    border: 2px solid var(--color-border);
-  }
-
-  .range:focus {
-    outline: 0;
-  }
-
-  .range:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
   }
 </style>
