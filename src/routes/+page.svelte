@@ -152,9 +152,10 @@
     <code>sampleRate</code>.
   </p>
   <p>
-    <code>input</code>
-    contains the unmodified samples from the audio file. Your effect should write the corresponding modified samples to the
-    <code>output</code> array.
+    <code>input</code> and <code>output</code> contain the audio data. Each is an array of channels; each channel is
+    itself an array containing raw samples as 32-bit floating point numbers. The unmodified samples from the audio file
+    are contained in the <code>input</code> channel arrays. Your effect should write the modified samples to the
+    corresponding <code>output</code> channel arrays.
   </p>
   <p>
     <code>params</code> is an object containing the current value of each parameter defined to the right of the code editor.
