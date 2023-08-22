@@ -96,24 +96,16 @@ export async function compile(ctx: AudioContext, code: string, params: Parameter
       }
 
       process(inputs, outputs, params) {
-        const inputChannels = inputs[0];
-        const outputChannels = outputs[0];
-
-        for (let channel = 0; channel < inputChannels.length; channel++) {
-          const input = inputChannels[channel];
-          const output = outputChannels[channel];
-
-          const parameters = new Proxy({}, {
-            get(target, prop) {
-              return params[prop]?.[0] || 0;
-            }
-          });
-
-          try {
-            this.run(input, output, parameters);
-          } catch (e) {
-            console.error(e);
+        const parameters = new Proxy({}, {
+          get(target, prop) {
+            return params[prop]?.[0] || 0;
           }
+        });
+
+        try {
+          this.run(inputs[0], outputs[0], parameters);
+        } catch (e) {
+          console.error(e);
         }
 
         return this.keepalive;
