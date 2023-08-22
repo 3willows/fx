@@ -23,7 +23,7 @@ export const presets: Filter[] = [
   {
     name: "Low-Pass Filter",
     code: dedent(`
-    if (this.prev?.length !== output.length) this.prev = new Float32Array(output.length);
+    if (this.prev?.length !== input.length) this.prev = new Float32Array(input.length);
 
     const a = params.freq / sampleRate;
 
@@ -34,40 +34,38 @@ export const presets: Filter[] = [
       }
     }`),
     params: [{ name: "freq", minValue: 1, maxValue: 48000 }]
+  },
+  {
+    name: "Delay (WIP)",
+    code: dedent(`
+    // calculate the number of samples in memory
+    const samples = Math.ceil(params.ms * sampleRate / 1000);
+
+    // initialize the memory
+    if (this.memory?.length !== input.length) this.memory = new Array(input.length).fill([]);
+
+    for (let channel = 0; channel < input.length; channel++) {
+      // truncate any extra samples in memory
+      const extra = this.memory[channel].length - samples;
+      if (extra > 1) this.memory[channel].splice(0, extra - 1);
+
+      for (let i = 0; i < input[channel].length; i++) {
+        // if the first sample in memory was played \`ms\` milliseconds ago, read it
+        let delay = 0;
+        if (this.memory[channel].length > samples) delay = this.memory[channel].shift();
+
+        // mix the delayed sample into the output
+        output[channel][i] = input[channel][i] + params.feedback * delay;
+
+        // save the output to memory
+        this.memory[channel].push(output[channel][i]);
+      }
+    }`),
+    params: [
+      { name: "ms", minValue: 1, maxValue: 1000 },
+      { name: "feedback", minValue: 0, maxValue: 1 }
+    ]
   }
-  // {
-  //   name: "Delay (WIP)",
-  //   code: dedent(`
-  //   // calculate the number of samples in memory
-  //   const samples = Math.ceil(params.ms * sampleRate / 1000);
-
-  //   // initialize the memory
-  //   if (this.memory?.[0].length !== output.length) this.memory = new Array(output.length).fill([]);
-
-  //   for (let channel = 0; channel < input.length; channel++) {
-  //     // truncate any extra samples in memory
-  //     const extra = this.memory[channel].length - samples;
-  //     if (extra > 1) this.memory[channel].splice(0, extra - 1);
-
-  //     for (let i = 0; i < input[channel].length; i++) {
-
-  //       // if the first sample in memory was played \`ms\` milliseconds ago, read it
-  //       let delay = 0;
-  //       console.log(input[channel].length, samples);
-  //       if (this.memory[channel].length > samples) delay = this.memory[channel].shift();
-
-  //       // mix the delayed sample into the output
-  //       output[channel][i] = input[channel][i] + params.feedback * delay;
-
-  //       // save the output to memory
-  //       this.memory[channel].push(output[channel][i]);
-  //     }
-  //   }`),
-  //   params: [
-  //     { name: "ms", minValue: 1, maxValue: 1000 },
-  //     { name: "feedback", minValue: 0, maxValue: 1 }
-  //   ]
-  // }
 ];
 
 const CODE = localStorage.getItem("code") || presets[0]?.code;
