@@ -1,14 +1,27 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   export let min = 0;
   export let max = 1;
   export let step = 0.01;
   export let value = 0.5;
 
   $: progress = value / max;
+
+  const dispatch = createEventDispatcher<{ input: number }>();
 </script>
 
 <div>
-  <input class="range" type="range" {min} {max} {step} bind:value style="--progress: {100 * progress}%;" />
+  <input
+    class="range"
+    type="range"
+    {min}
+    {max}
+    {step}
+    bind:value
+    style="--progress: {100 * progress}%;"
+    on:input={e => dispatch("input", Number(e.currentTarget.value))}
+  />
 </div>
 
 <style>

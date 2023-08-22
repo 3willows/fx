@@ -3,7 +3,6 @@ let WET = new Uint8Array();
 
 export interface Parameter {
   name: string;
-  defaultValue: number;
   minValue: number;
   maxValue: number;
 }
@@ -45,9 +44,9 @@ export default class Audio {
     this.#connect();
   }
 
-  // param(key: string, value: number) {
-  //   this.#worklet?.params.get(key)?.setValueAtTime(value, 0);
-  // }
+  param(key: string, value: number) {
+    this.#worklet?.parameters.get(key)?.setValueAtTime(value, 0);
+  }
 
   graphs() {
     if (DRY.length !== this.#dry.frequencyBinCount) DRY = new Uint8Array(this.#dry.frequencyBinCount);
@@ -73,11 +72,7 @@ let n = 0n;
 export async function compile(ctx: AudioContext, code: string, params: Parameter[]) {
   const name = `${++n}`;
 
-  const description = params.map(param => ({
-    ...param,
-    defaultValue: Math.min(param.maxValue, Math.max(param.defaultValue, param.minValue)),
-    automationRate: "k-rate"
-  }));
+  const description = params.map(param => ({ ...param, defaultValue: param.maxValue, automationRate: "k-rate" }));
 
   // The weird keepalive hack is necessary because of this bug in Safari and Chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=921354
   // Once that gets fixed, can just return `false` from `process`

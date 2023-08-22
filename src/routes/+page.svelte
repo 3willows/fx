@@ -123,16 +123,11 @@
     <Button slot="help" size="sm" on:click={openParametersHelp}>
       <Icon name="help" width={12} height={12} />
     </Button>
-    <Button
-      slot="actions"
-      on:click={() => {
-        params.set([...$params, { name: "", defaultValue: 0.5, minValue: 0, maxValue: 1 }]);
-      }}
-    >
+    <Button slot="actions" on:click={() => params.set([...$params, { name: "", minValue: 0, maxValue: 1 }])}>
       <span>Add parameter</span>
       <Icon name="add" width={12} height={12} />
     </Button>
-    <Parameters bind:params={$params} />
+    <Parameters bind:params={$params} on:change={e => audio.param(e.detail.name, e.detail.value)} />
   </Panel>
 </div>
 

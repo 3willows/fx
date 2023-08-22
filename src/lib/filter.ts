@@ -16,7 +16,7 @@ export const presets: Filter[] = [
       // gain controls the volume! don't set it higher than 1
       output[i] = input[i] * params.gain;
     }`),
-    params: [{ name: "gain", defaultValue: 1, minValue: 0, maxValue: 1 }]
+    params: [{ name: "gain", minValue: 0, maxValue: 1 }]
   },
   {
     name: "Low-Pass Filter (WIP)",
@@ -28,7 +28,7 @@ export const presets: Filter[] = [
       output[i] = a * input[i] + (1 - a) * this.prev;
       this.prev = output[i];
     }`),
-    params: [{ name: "freq", defaultValue: 48000, minValue: 1, maxValue: 48000 }]
+    params: [{ name: "freq", minValue: 1, maxValue: 48000 }]
   }
 ];
 

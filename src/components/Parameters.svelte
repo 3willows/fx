@@ -1,27 +1,36 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   import type { Parameter } from "$lib/Audio";
   import Range from "$components/Range.svelte";
   import Icon from "./Icon.svelte";
 
   export let params: Parameter[] = [];
+
+  const dispatch = createEventDispatcher<{ change: { name: string; value: number } }>();
 </script>
 
 <div class="wrapper">
   <table>
     <tbody>
-      {#each params as parameter, idx}
+      {#each params as param, idx}
         <tr>
           <td class="wide">
-            <input class="input" bind:value={parameter.name} placeholder="Parameter name" />
+            <input class="input" bind:value={param.name} placeholder="Parameter name" />
           </td>
           <td class="narrow">
-            <input class="input" type="number" bind:value={parameter.minValue} />
+            <input class="input" type="number" bind:value={param.minValue} />
           </td>
           <td class="narrow">
-            <input class="input" type="number" bind:value={parameter.maxValue} />
+            <input class="input" type="number" bind:value={param.maxValue} />
           </td>
           <td class="wide range">
-            <Range bind:value={parameter.defaultValue} min={parameter.minValue} max={parameter.maxValue} />
+            <Range
+              on:input={e => dispatch("change", { name: param.name, value: e.detail })}
+              min={param.minValue}
+              max={param.maxValue}
+              value={param.maxValue}
+            />
           </td>
           <td class="button">
             <button class="remove" on:click={() => (params = params.filter((_, i) => i !== idx))}>
