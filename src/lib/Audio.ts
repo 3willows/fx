@@ -72,7 +72,11 @@ let n = 0n;
 export async function compile(ctx: AudioContext, code: string, params: Parameter[]) {
   const name = `${++n}`;
 
-  const description = params.map(param => ({ ...param, defaultValue: param.maxValue, automationRate: "k-rate" }));
+  const description = params.map(param => ({
+    ...param,
+    defaultValue: (param.maxValue - param.minValue) / 2,
+    automationRate: "k-rate"
+  }));
 
   // The weird keepalive hack is necessary because of this bug in Safari and Chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=921354
   // Once that gets fixed, can just return `false` from `process`

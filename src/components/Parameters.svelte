@@ -29,7 +29,7 @@
               on:input={e => dispatch("change", { name: param.name, value: e.detail })}
               min={param.minValue}
               max={param.maxValue}
-              value={param.maxValue}
+              value={(param.maxValue - param.minValue) / 2}
             />
           </td>
           <td class="button">
