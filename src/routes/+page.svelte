@@ -81,6 +81,7 @@
           params.set(preset.params);
         }}
       >
+        <option disabled selected>Preset</option>
         {#each presets as preset, i}
           <option value={i}>{preset.name}</option>
         {/each}
@@ -195,9 +196,16 @@
   .header {
     grid-area: header;
     display: grid;
-    grid-template-rows: auto auto;
-    grid-template-columns: 1fr auto;
-    grid-template-areas: "title actions" "byline actions";
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "title" "byline" "actions";
+  }
+
+  @media (min-width: 720px) {
+    .header {
+      grid-template-rows: auto auto;
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "title actions" "byline actions";
+    }
   }
 
   .title {
@@ -219,9 +227,18 @@
 
   .actions {
     grid-area: actions;
-    display: flex;
+    display: grid;
     align-items: center;
+    grid-template-columns: 1fr auto auto;
+    justify-content: start;
     gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 720px) {
+    .actions {
+      margin-top: 0;
+    }
   }
 
   .label {
