@@ -13,12 +13,7 @@
   import Button from "$components/Button.svelte";
   import Modal from "$components/Modal.svelte";
 
-  let file: File;
   let url = "";
-  $: {
-    if (url) URL.revokeObjectURL(url);
-    if (file) url = URL.createObjectURL(file);
-  }
 
   const search = new URLSearchParams(window.location.search);
   try {
@@ -99,13 +94,22 @@
         <audio bind:this={el} src={url} controls loop />
       </div>
     {:else}
-      <FileUploader
-        accept={["audio/wav"]}
-        on:upload={e => {
-          file = e.detail.file;
-          audio.ctx.resume();
-        }}
-      />
+      <div class="upload">
+        <FileUploader
+          accept={["audio/wav"]}
+          on:upload={e => {
+            url = URL.createObjectURL(e.detail.file);
+            audio.ctx.resume();
+          }}
+        />
+        <button
+          on:click={() => {
+            url = "/sunsets.mp3";
+          }}
+        >
+          "sunsets" by back2thapast
+        </button>
+      </div>
     {/if}
   </Panel>
 
@@ -250,5 +254,11 @@
     .label {
       display: block;
     }
+  }
+
+  .upload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 </style>
