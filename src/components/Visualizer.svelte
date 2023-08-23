@@ -113,10 +113,6 @@
 
 <figure class="wrapper">
   <canvas class="canvas" bind:this={canvas} bind:clientWidth={w} bind:clientHeight={h} />
-  <figcaption class="axis">
-    <span>0 Hz</span>
-    <span>24 kHz</span>
-  </figcaption>
 </figure>
 
 <style>
@@ -132,12 +128,5 @@
   .canvas {
     width: 100%;
     height: 5rem;
-  }
-
-  .axis {
-    display: flex;
-    justify-content: space-between;
-    color: #999999;
-    font-size: var(--text-sm);
   }
 </style>

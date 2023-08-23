@@ -36,6 +36,22 @@ export const presets: Filter[] = [
     params: [{ name: "freq", minValue: 1, maxValue: 48000 }]
   },
   {
+    name: "High-Pass Filter",
+    code: dedent(`
+    if (this.prev?.length !== input.length) this.prev = new Float32Array(input.length);
+
+    const a = params.freq / sampleRate;
+
+    for (let channel = 0; channel < input.length; channel++) {
+      for (let i = 0; i < input[channel].length; i++) {
+        const avg = a * input[channel][i] + (1 - a) * this.prev[channel];
+        output[channel][i] = input[channel][i] - avg;
+        this.prev[channel] = avg;
+      }
+    }`),
+    params: [{ name: "freq", minValue: 1, maxValue: 48000 }]
+  },
+  {
     name: "Delay (WIP)",
     code: dedent(`
     // calculate the number of samples in memory
