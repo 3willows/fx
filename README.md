@@ -1,6 +1,6 @@
 # fx
 
-a browser-based audio effect playground
+a browser-based live coding audio effect playground
 
 ## todo
 
@@ -8,7 +8,4 @@ a browser-based audio effect playground
 - [ ] logarithmic visualizer buckets
 - [ ] envelope detection
 - [ ] pretty audio
-- [ ] share
-- [ ] help text
-- [ ] presets?
 - [ ] wasm support?
