@@ -105,6 +105,7 @@
         <button
           on:click={() => {
             url = "/sunsets.mp3";
+            audio.ctx.resume();
           }}
         >
           "sunsets" by back2thapast
